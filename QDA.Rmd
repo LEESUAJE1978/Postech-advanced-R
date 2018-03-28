@@ -1,0 +1,54 @@
+---
+title: "Quardratic Discriminant Analysis"
+author: "LEESUJAE"
+date: "2018년 3월 29일"
+Reference: Postech Mooc, Advanced R(LEE HE SEON)
+output: html_document
+---
+###1. Read Data
+```{r iris}
+summary(iris)
+attach(iris)
+```
+
+###2. Box's M-test
+###귀무가설: 모집단의 분산-공분산 행렬이 동일, 대립가설: 모집단 분산-공분산 행렬이 동일하지 않다. 
+###등분산 검정을 위한 패키지: biotools
+```{r pressure, echo=FALSE}
+install.packages("biotools")
+library(biotools)
+```
+
+###3.검정: 검정결과 p-value가 2.2e-16이므로 귀무가설 기각, 대립가설 채택, QDA실시
+```{r}
+boxM(iris[1:4], iris$Species)
+```
+
+###4. QDA함수: qda(종속변수 ~ 독립변수, data=학습데이터 이름, prior= 사전확률)
+```{r}
+iris.qda<-qda(Species~., data = train, prior =c(1/3,1/3,1/3))
+iris.qda
+```
+
+###4. predict test data set n=50
+```{r}
+testpredq<-predict(iris.qda, test)
+testpredq
+```
+
+###5. arruracy of QDA
+```{r}
+CrossTable(x=testLabels, y=testpredq$class, prop.chisq = FALSE)
+```
+
+###6. Partition Plot:partimat()패키지 설치
+```{r}
+install.packages("klaR")
+library(klaR)
+```
+
+###.7 plotting
+```{r}
+partimat(as.factor(iris$Species)~., data=iris, method ="lda")
+partimat(as.factor(iris$Species)~., data=iris, method ="qda")
+```

@@ -1,0 +1,64 @@
+---
+title: "Discriminant Analysis"
+author: "LEESUJAE"
+date: "2018년 3월 28일"
+Reference: Postech Mooc_ Advanced R(LEE HE SEON)
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###1. Read Datan
+
+
+
+```{r iris}
+summary(iris)
+```
+
+###2. Training/ test Data: n =150
+
+```{r pressure, echo=FALSE}
+set.seed(1000)
+N<- nrow(iris)
+tr.idx <- sample(1:N, size = N*2/3, replace = FALSE)
+```
+
+###3. attributes in training and test
+```{r}
+iris.train<-iris[tr.idx, -5]
+iris.test<-iris[-tr.idx,-5]
+```
+
+###4. target value in training and test
+```{r}
+trainLabels <- iris[tr.idx,5]
+testLabels <- iris[-tr.idx,5]
+```
+
+###5.Data set
+```{r}
+train<-iris[tr.idx,]
+test<-iris[-tr.idx]
+```
+
+###6. Linear Discriminant Analysis Package 설치
+```{r}
+install.packages("MASS")
+library(MASS)
+```
+
+###7. LDA equation lda(종속변수 ~ 독립변수, data =학습데이터 이름, prior = 사전확률)
+### 사전확률(prior probability):원인 A가 발생할 확률인P(A)와 같이 결과가 나타나기 전에 결정되어 있는 확률
+```{r }
+iris.lda <-lda(Species ~., data = train, prior = c(1/3,1/3,1/3))
+iris.lda
+```
+
+###.8. 검증데이터를 LDA에 적용하여 범주 추정
+```{r}
+testpred <- predict(iris.lda, test)
+testpred
+```
