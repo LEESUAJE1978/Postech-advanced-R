@@ -1,0 +1,72 @@
+---
+title: "SVM_Kernel"
+author: "LEESUJAE"
+date: "2018년 4월 8일"
+Reference: Postech Mooc, Advanced R(LEE HE SEON)
+output: html_document
+---
+###1. Read Data
+```{r iris}
+summary(iris)
+attach(iris)
+```
+
+###2.Package install for SVM, e'1071', for crosstable, 'caret'
+```{r packages}
+install.packages(c("e1071","caret"))
+library(e1071)
+library(caret)
+help(svm)
+```
+
+###3.Training & Test Data set 
+```{r seed}
+set.seed(1000)
+N=nrow(iris)
+tr.idx=sample(1:N, size=N*2/3, replace = F) #split data
+y=iris[,5] #target variable
+train=iris[tr.idx,] #training data
+test=iris[-tr.idx,]
+```
+
+###4. Kernel type 별 SVM 실행
+# degree: parameter needed for kernel of type polynomial (default: 3)
+# gamma: parameter needed for all kernels except linear (default: 1/(data dimension))
+# coef0: parameter needed for kernels of type polynomial and sigmoid (default: 0)
+```{r kernel}
+m1<-svm(Species~., data=train) #default 는 radial basis exp(-gamma*|u-v|^2)
+summary(m1)
+
+m2<-svm(Species~., data=train, kernel="polynomial") #(gamma*u'*v + coef0)^degree
+summary(m2)
+
+m3<-svm(Species~., data=train, kernel="sigmoid") #tanh(gamma*u'*v + coef0)
+summary(m3)
+
+m4<-svm(Species~., data=train, kernel="linear")
+summary(m4)
+```
+
+###5. Prediction_Radial Basis Function
+```{r prediction}
+pred11<-predict(m1,test)
+confusionMatrix(pred11, test$Species)#predict와 test Species와 비교, Accuracy 96%
+```
+
+###6. prediction_Polynomial Function
+```{r polynomial}
+pred12<-predict(m2, test)
+confusionMatrix(pred12, test$Species)#Accuracy 90%
+```
+
+###7 prediction_sigmoid
+```{r sigmod}
+pred13<-predict(m3, test)
+confusionMatrix(pred13, test$Species)#Accuracy 90%
+```
+
+###8. prediction_linear
+```{r linear}
+pred14<-predict(m4, test)
+confusionMatrix(pred14,test$Species)#Accuracy 96%
+```

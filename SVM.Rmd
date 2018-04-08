@@ -1,0 +1,44 @@
+---
+title: "Support Vector Machine"
+author: "LEESUJAE"
+date: "2018년 3월 29일"
+Reference: Postech Mooc, Advanced R(LEE HE SEON)
+output: html_document
+---
+###. SVM은 대표적인 기계학습 분류 알고리즘이고 정확도가 kNN에 비해 좋고 다양한 데이터(연속형, 범주형)를 다룰 수 있음
+###. 단점은 해석상의 어려움이 있고 데이터 처리에 속도와 메모리가 많이 필요함
+###. 선형 SVM과 비선현 SVM 모델이 있고 대부분은 비선형 SVM으로 분류함
+###. SVM 패키지 e1071
+
+###1. read data
+```{r iris}
+summary(iris)
+attach(iris)
+```
+
+###2. install packages
+
+```{r pressure, echo=FALSE}
+install.packages("e1071")
+library(e1071)
+```
+
+###3. SVM(y변수~x변수, data = )
+###. svm에서 주어지는 옵션(default), kernel=radial basis function, gamma =1/(# of dimension)(1/4=0.25)
+```{r}
+m1<-svm(Species ~., data =iris)
+summary(m1)
+```
+
+###4. SVM 모델에 적용한 예측범주와 실제 범주 비교(전체 데이터 사용)
+```{r}
+x<-iris[,-5]
+pred<-predict(m1, x)
+y<-iris[,5]
+table(pred,y)
+```
+
+###5. plotting
+```{r}
+plot(m1, iris, Petal.Width~Petal.Length, slice=list(Sepal.Width=3,Sepal.Length=4))
+```
