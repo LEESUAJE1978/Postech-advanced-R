@@ -12,8 +12,7 @@ attach(iris)
 ```
 
 ###2.Package install for SVM, e'1071', for crosstable, 'caret'
-```{r packages}
-install.packages(c("e1071","caret"))
+```{r library}
 library(e1071)
 library(caret)
 help(svm)
@@ -30,9 +29,9 @@ test=iris[-tr.idx,]
 ```
 
 ###4. Kernel type 별 SVM 실행
-# degree: parameter needed for kernel of type polynomial (default: 3)
-# gamma: parameter needed for all kernels except linear (default: 1/(data dimension))
-# coef0: parameter needed for kernels of type polynomial and sigmoid (default: 0)
+##### degree: parameter needed for kernel of type polynomial (default: 3)
+##### gamma: parameter needed for all kernels except linear (default: 1/(data dimension))
+##### coef0: parameter needed for kernels of type polynomial and sigmoid (default: 0)
 ```{r kernel}
 m1<-svm(Species~., data=train) #default 는 radial basis exp(-gamma*|u-v|^2)
 summary(m1)
